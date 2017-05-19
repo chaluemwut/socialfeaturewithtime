@@ -53,7 +53,7 @@ def find_follower():
     gt_zone = db.tweet_search_id.find({'retweet_count':{'$gt':1000}, 'seq_id': 1})
     x2, y2, tweet_id2 = grap_tweet(gt_zone)
 
-    result = [x, y, tweet_id2, x2, y2, tweet_id]
+    result = [x, y, tweet_id, x2, y2, tweet_id2]
     pickle.dump(result, open('follower.obj', 'wb'))
 
 
