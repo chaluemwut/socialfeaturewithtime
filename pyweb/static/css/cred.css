@@ -1,0 +1,20 @@
+.color_box {
+	height: 5px;
+	background-image: -webkit-gradient(linear, left top, right top, color-stop(0.2, #ff0000),
+		color-stop(0.4, #ff00ff), color-stop(0.6, #0000ff),
+		color-stop(#ff0000),
+		color-stop(0.99, #00ffff));
+	background-image: -moz-linear-gradient(left center, #ff0000 20%, #ff00ff 40%, #0000ff 60%,
+		#ff0000 80%,
+		#00ffff 90%);
+}
+
+.col-right-line:before {
+  position: absolute;
+  content: " ";
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 1px;
+  background-color: @color-neutral;
+}

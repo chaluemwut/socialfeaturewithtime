@@ -1,0 +1,33 @@
+db.tweet_search_id.aggregate(
+{
+	$match : {harvest_keyword:'g7summit', seq_id:1}
+},
+{
+	$group:{_id: 'harvest_keyword', $sum: "$retweet_count"}});
+
+ db.tweet_search_id.aggregate(
+    {
+	$match : {harvest_keyword : "brexit", seq_id:3}
+    },
+    {
+	$group : { _id : "$harvest_keyword", total : { $sum : "$retweet_count" } }
+    }
+  );
+
+db.tweet_search_id.aggregate(
+{$match : {retweet_count:{$lt:10}, seq_id:1}},
+{$group:{_id: 'harvest_keyword', $sum: "$retweet_count"}});
+
+
+db.tweet_search_id.aggregate(
+    {
+	$match : {harvest_keyword : "brexit", seq_id:3}
+    },
+    {
+	$group : { _id : "$harvest_keyword", total : { $sum : "$retweet_count" } }
+    }
+  );
+
+
+
+

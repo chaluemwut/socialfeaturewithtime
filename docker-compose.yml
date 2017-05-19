@@ -1,0 +1,54 @@
+web:
+  restart: always
+  build: ./pyweb
+  expose:
+    - "8006"
+  links:
+    - db
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+  command: /usr/local/bin/gunicorn -w 2 -b :8006 server:app
+
+nginx:
+  restart: always
+  build: ./nginx/
+  ports:
+    - "8006:80"
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+  volumes_from:
+    - web
+  links:
+    - web
+
+harvest:
+   build: ./pyimage/
+   links:
+    - db
+   volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - .:/code
+
+nharvest:
+  build: ./pyimage/
+  links:
+    - mysql
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - .:/code
+
+db:
+   image: mongo:latest
+   volumes:
+     - /etc/localtime:/etc/localtime:ro
+     - './save/:/save'
+     - './data:/data/db'
+
+mysql:
+   image: mysql:latest
+   environment:
+     MYSQL_ROOT_PASSWORD: Rvpooh123
+     MYSQL_DATABASE: sft
+     MYSQL_USER: sft
+     MYSQL_PASSWORD: sft
+

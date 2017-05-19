@@ -1,0 +1,16 @@
+.namechecker_btn {
+	width: 100%; 
+	margin-top: 10px; 
+	background-color: #3fa9f5; 
+	color: #fff;
+}
+
+.namechecker_link {
+	color: #40a51a;
+	text-decoration: none;
+}
+
+.namechecker_link:hover {
+	color: #20530d;
+	text-decoration: none;
+}
