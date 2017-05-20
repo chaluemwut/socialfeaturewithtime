@@ -1,8 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+import os
 
-engine=create_engine('mysql+pymysql://root:Rvpooh123@localhost/sft')
+engine=create_engine('mysql+pymysql://root:Rvpooh123@{}/sft?charset=utf8mb4'.format(os.environ['MYSQL_PORT_3306_TCP_ADDR']))
 
 Base = declarative_base()
 
