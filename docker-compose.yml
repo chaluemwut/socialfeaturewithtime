@@ -20,6 +20,7 @@ nginx:
     - web
   links:
     - web
+    - mysql
 
 nharvest:
   build: ./pymysql/
