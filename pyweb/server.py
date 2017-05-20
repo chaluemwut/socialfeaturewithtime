@@ -45,6 +45,7 @@ def index():
     str_result = str[0:-1]+'];'
     print(str_result)
     return render_template('index.html', str_result=str_result)
-
-if __name__ == "__main__":
-    app.run()
+    
+#
+# if __name__ == "__main__":
+#     app.run()
