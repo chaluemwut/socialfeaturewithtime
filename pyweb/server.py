@@ -8,7 +8,7 @@ import os
 
 app = Flask(__name__)
 
-mysql_engine = create_engine('mysql+pymysql://root:Rvpooh123@{}/sft?charset=utf8mb4'.format(os.environ['MYSQL_PORT_27017_TCP_ADDR']))
+mysql_engine = create_engine('mysql+pymysql://root:Rvpooh123@{}/sft?charset=utf8mb4'.format(os.environ['MYSQL_PORT_3306_TCP_ADDR']))
 Session = sessionmaker(bind=mysql_engine)
 session = Session()
 
