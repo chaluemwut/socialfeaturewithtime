@@ -1,60 +1,52 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>FB filter</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link href="{{ url_for('static', filename='css/bootstrap.css') }}"
-	rel="stylesheet" type="text/css" />
-<link href="{{ url_for('static', filename='css/cred.css') }}"
-	rel="stylesheet" type="text/css" />
+    <title>FB filter</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="{{ url_for('static', filename='css/bootstrap.css') }}"
+          rel="stylesheet" type="text/css"/>
+    <link href="{{ url_for('static', filename='css/cred.css') }}"
+          rel="stylesheet" type="text/css"/>
 
-	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!-- Resources -->
+    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script src="https://www.amcharts.com/lib/3/serial.js"></script>
+    <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all"/>
+    <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+
+    <style>
+#chartdiv {
+	width	: 100%;
+	height	: 500px;
+}
+    </style>
+
     <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(loadAllChart);
+        var chartData = {{str_result|safe}}
 
-
-      function loadAllChart(){
-      	    dataChart1();
-      }
-
-	  function dataChart1(){
-        var data = google.visualization.arrayToDataTable([
-          ['retweet', 'seq id'],
-          {% for r in data1 %}
-            	[{{r[0]}}, {{r[1]}}],
-          {% endfor %}
-        ]);
-
-        var options = {
-          title: 'songkran retweet',
-          vAxis: {title: 'average retweet'},
-          legend: 'none'
-        };
-        var chart = new google.visualization.LineChart(document.getElementById('data_retweet'));
-        chart.draw(data, options);
-
-        var data2 = google.visualization.arrayToDataTable([
-          ['favorite', 'seq id'],
-          {% for r in data1 %}
-            	[{{r[0]}}, {{r[2]}}],
-          {% endfor %}
-        ]);
-
-        var options2 = {
-          title: 'songkran favorite',
-          vAxis: {title: 'average favorite'},
-          legend: 'none'
-        };
-        var chart2 = new google.visualization.LineChart(document.getElementById('data_favorite'));
-        chart2.draw(data2, options2);
-	  }
+        AmCharts.makeChart( "chartdiv", {
+          "type": "serial",
+          "dataProvider": chartData,
+          "categoryField": "date",
+          "legend": {
+            "position": "right"
+          },
+          "graphs": [ {
+            "title":"iran",
+            "valueField": "iran",
+            "type": "line"
+           }, {
+             "title":"mako",
+			 "valueField": "mako",
+			 "type": "line"
+			  }]
+        } );
     </script>
 </head>
 <body>
-  {% include "header.html" %}
-    <div id="data_retweet" style="width: 900px; height: 500px"></div>
-    <div id="data_favorite" style="width: 900px; height: 500px"></div>
-  {% include "footer.html" %}
+{% include "header.html" %}
+<div id="chartdiv"></div>
+{% include "footer.html" %}
 </body>
 </html>

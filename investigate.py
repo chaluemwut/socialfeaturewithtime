@@ -56,6 +56,18 @@ def find_follower():
     result = [x, y, tweet_id, x2, y2, tweet_id2]
     pickle.dump(result, open('follower.obj', 'wb'))
 
+def plot_data():
+    # import matplotlib.pyplot as plt
+    data = pickle.load(open('result/follower.obj', 'rb'))
+    for d in data:
+        print(d)
+    print(np.average(data[0]), len(data[0]))
+    print(np.average(data[3]), len(data[3]))
+    # plt.boxplot([data[0], data[3]])
+    # plt.show()
 
 if __name__ == '__main__':
-    find_follower()
+    json_str = get_by_id('852983633518317568')
+    print(json.dumps(json_str._json, indent=4))
+    # find_follower()
+    # plot_data()

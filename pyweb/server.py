@@ -1,51 +1,50 @@
-from flask import Flask, url_for, session
+# -*- coding: utf-8 -*-
+
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
+from flask import Flask
 from flask.templating import render_template
-from pymongo import MongoClient
-import numpy as np
-import os
 
 app = Flask(__name__)
 
-client = MongoClient(os.environ['DB_PORT_27017_TCP_ADDR'], 27017)
-db = client['fwt']
-
-search_keyword = ['NorthKorea']
-
-
-def get_seq():
-    col = db.seq
-    return col.count()
-
+mysql_engine = create_engine('mysql+pymysql://root:Rvpooh123@localhost/sft?charset=utf8mb4')
+Session = sessionmaker(bind=mysql_engine)
+session = Session()
 
 @app.route("/", methods=['POST', 'GET'])
 def index():
-    all_data = {}
-    last_seq = get_seq()
-    for keyword in search_keyword:
-        keyword_data_lst = []
-        for i in range(1, last_seq + 1):
-            list_retweet = []
-            list_favorite = []
-            db_data_list = db.tweet_search_id.find({'harvest_keyword': keyword, 'seq_id': i})
-            for db_data in db_data_list:
-                retweet_data = db_data['retweet_count']
-                favorite_data = db_data['favorite_count']
-                list_retweet.append(retweet_data)
-                list_favorite.append(favorite_data)
+    db_result = session.execute("""
+    select date(a.harvest_date) as harvest_date, a.harvest_keyword, sum(retweet_count), count(b.all_id)
+    from all_tweet a, day_tweet b
+    where a.id = b.all_id
+    group by date(a.harvest_date), a.harvest_keyword    
+        """)
+    main_result = []
+    for data in db_result:
+        main_result.append(data)
+        print(data)
 
-            if len(list_retweet) == 0:
-                av_favorite = 0
-            else:
-                av_retweet = np.sum(list_retweet)
+    db_date = session.execute("select distinct date(harvest_date) from all_tweet order by date(harvest_date)")
+    all_result = {}
+    date_list = []
+    for date_obj in db_date:
+        harvest_date = date_obj[0]
+        date_list.append(harvest_date)
+        all_data = []
+        for data in main_result:
+            if data[0] == harvest_date:
+                all_data.append(int(data[2]))
+        all_result[harvest_date] = all_data
 
-            if len(list_favorite) == 0:
-                av_favorite = 0
-            else:
-                av_favorite = np.average(list_favorite)
+    str = '['
+    for harvest_date in date_list[0:2]:
+        harvest_result = all_result[harvest_date]
+        print(harvest_date, harvest_result)
+        str = str+'{'+'"date":"{}", "iran": {}, "mako": {}'.format(harvest_date, harvest_result[0], harvest_result[1])+'},'
 
-            data_seq_lst = [i, av_retweet, av_favorite, db_data_list.count()]
-            keyword_data_lst.append(data_seq_lst)
+    str_result = str[0:-1]+'];'
+    print(str_result)
+    return render_template('index.html', str_result=str_result)
 
-        all_data[keyword] = keyword_data_lst
-
-    return render_template('index.html', data1=all_data['NorthKorea'])
+if __name__ == "__main__":
+    app.run()
