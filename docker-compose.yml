@@ -4,7 +4,7 @@ web:
   expose:
     - "9090"
   links:
-    - db
+    - mysql
   volumes:
     - /etc/localtime:/etc/localtime:ro
   command: /usr/local/bin/gunicorn -w 2 -b :9090 server:app
@@ -21,14 +21,6 @@ nginx:
   links:
     - web
 
-harvest:
-   build: ./pyimage/
-   links:
-    - db
-   volumes:
-    - /etc/localtime:/etc/localtime:ro
-    - .:/code
-
 nharvest:
   build: ./pymysql/
   links:
@@ -36,13 +28,6 @@ nharvest:
   volumes:
     - /etc/localtime:/etc/localtime:ro
     - .:/code
-
-db:
-   image: mongo:latest
-   volumes:
-     - /etc/localtime:/etc/localtime:ro
-     - './save/:/save'
-     - './data:/data/db'
 
 mysql:
    image: mysql:latest

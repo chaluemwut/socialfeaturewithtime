@@ -17,7 +17,7 @@ class TwitterHarvest():
     def __init__(self, since_date, unit_date):
         self.since_date = since_date
         self.unit_date = unit_date
-        mysql_engine = create_engine('mysql+pymysql://root:Rvpooh123@{}/sft?charset=utf8mb4'.format(os.environ['DB_PORT_27017_TCP_ADDR']))
+        mysql_engine = create_engine('mysql+pymysql://root:Rvpooh123@{}/sft?charset=utf8mb4'.format(os.environ['MYSQL_PORT_27017_TCP_ADDR']))
         Session = sessionmaker(bind=mysql_engine)
         self.session = Session()
 

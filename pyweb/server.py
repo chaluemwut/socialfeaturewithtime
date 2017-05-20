@@ -4,10 +4,11 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from flask import Flask
 from flask.templating import render_template
+import os
 
 app = Flask(__name__)
 
-mysql_engine = create_engine('mysql+pymysql://root:Rvpooh123@localhost/sft?charset=utf8mb4')
+mysql_engine = create_engine('mysql+pymysql://root:Rvpooh123@{}/sft?charset=utf8mb4'.format(os.environ['MYSQL_PORT_27017_TCP_ADDR']))
 Session = sessionmaker(bind=mysql_engine)
 session = Session()
 
@@ -45,7 +46,7 @@ def index():
     str_result = str[0:-1]+'];'
     print(str_result)
     return render_template('index.html', str_result=str_result)
-    
+
 #
 # if __name__ == "__main__":
 #     app.run()
