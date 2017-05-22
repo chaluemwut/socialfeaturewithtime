@@ -38,7 +38,7 @@ def index():
         all_result[harvest_date] = all_data
 
     str = '['
-    for harvest_date in date_list[0:2]:
+    for harvest_date in date_list:
         harvest_result = all_result[harvest_date]
         print(harvest_date, harvest_result)
         str = str+'{'+'"date":"{}", "iran": {}, "mako": {}'.format(harvest_date, harvest_result[0], harvest_result[1])+'},'
